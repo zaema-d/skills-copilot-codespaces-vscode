@@ -1,15 +1,129 @@
 //create web server
-const express = require("express");
+const express = require('express');
 const app = express();
 
-//middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+//import the mysql connection
+const mysql = require('../db/connection');
 
-//routes
-app.use('/api/comments', require('./routes/api/comments'));
+//import the middleware
+const middleware = require('../middleware');
 
-//start server
-const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`Server started on port ${port}`));
+//import the comment model
+const Comment = require('../models/comment');
+
+//import the user model
+const User = require('../models/user');
+
+//import the post model
+const Post = require('../models/post');
+
+//import the comment router
+const commentRouter = express.Router();
+
+//get all comments
+commentRouter.get('/', middleware.isLoggedIn, (req, res) => {
+    Comment.getAllComments((err, comments) => {
+        if (err) {
+            res.json({ success: false, message: `Failed to load all comments. Error: ${err}` });
+        } else {
+            res.write(JSON.stringify({ success: true, comments: comments }, null, 2));
+            res.end();
+        }
+    });
+});
+
+//get all comments of a post
+commentRouter.get('/post/:postId', middleware.isLoggedIn, (req, res) => {
+    Comment.getAllCommentsOfPost(req.params.postId, (err, comments) => {
+        if (err) {
+            res.json({ success: false, message: `Failed to load all comments. Error: ${err}` });
+        } else {
+            res.write(JSON.stringify({ success: true, comments: comments }, null, 2));
+            res.end();
+        }
+    });
+});
+
+//get all comments of a user
+commentRouter.get('/user/:userId', middleware.isLoggedIn, (req, res) => {
+    Comment.getAllCommentsOfUser(req.params.userId, (err, comments) => {
+        if (err) {
+            res.json({ success: false, message: `Failed to load all comments. Error: ${err}` });
+        } else {
+            res.write(JSON.stringify({ success: true, comments: comments }, null, 2));
+            res.end();
+        }
+    });
+});
+
+//get all comments of a user
+commentRouter.get('/user/:userId/post/:postId', middleware.isLoggedIn, (req, res) => {
+    Comment.getAllCommentsOfUserOnPost(req.params.userId, req.params.postId, (err, comments) => {
+        if (err) {
+            res.json({ success: false, message: `Failed to load all comments. Error: ${err}` });
+        } else {
+            res.write(JSON.stringify({ success: true, comments: comments }, null, 2));
+const express = require('express');
+const app = express();
+
+//import the mysql connection
+const mysql = require('../db/connection');
+
+//import the middleware
+const middleware = require('../middleware');
+
+//import the comment model
+const Comment = require('../models/comment');
+
+//import the user model
+const User = require('../models/user');
+
+//import the post model
+const Post = require('../models/post');
+
+//import the comment router
+const commentRouter = express.Router();
+
+//get all comments
+commentRouter.get('/', middleware.isLoggedIn, (req, res) => {
+    Comment.getAllComments((err, comments) => {
+        if (err) {
+            res.json({ success: false, message: `Failed to load all comments. Error: ${err}` });
+        } else {
+            res.write(JSON.stringify({ success: true, comments: comments }, null, 2));
+            res.end();
+        }
+    });
+});
+
+//get all comments of a post
+commentRouter.get('/post/:postId', middleware.isLoggedIn, (req, res) => {
+    Comment.getAllCommentsOfPost(req.params.postId, (err, comments) => {
+        if (err) {
+            res.json({ success: false, message: `Failed to load all comments. Error: ${err}` });
+        } else {
+            res.write(JSON.stringify({ success: true, comments: comments }, null, 2));
+            res.end();
+        }
+    });
+});
+
+//get all comments of a user
+commentRouter.get('/user/:userId', middleware.isLoggedIn, (req, res) => {
+    Comment.getAllCommentsOfUser(req.params.userId, (err, comments) => {
+        if (err) {
+            res.json({ success: false, message: `Failed to load all comments. Error: ${err}` });
+        } else {
+            res.write(JSON.stringify({ success: true, comments: comments }, null, 2));
+            res.end();
+        }
+    });
+});
+
+//get all comments of a user
+commentRouter.get('/user/:userId/post/:postId', middleware.isLoggedIn, (req, res) => {
+    Comment.getAllCommentsOfUserOnPost(req.params.userId, req.params.postId, (err, comments) => {
+        if (err) {
+            res.json({ success: false, message: `Failed to load all comments. Error: ${err}` });
+        } else {
+            res.write(JSON.stringify({ success: true, comments: comments }, null, 2));
