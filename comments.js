@@ -1,13 +1,15 @@
 //create web server
-const router = express.Router();
-const commentsCtrl = require('../controllers/comments');
+const express = require("express");
+const app = express();
 
-router.post('/posts/:id/comments', isLoggedIn, commentsCtrl.create);
-router.delete('/comments/:id', isLoggedIn, commentsCtrl.delete);
+//middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    res.redirect('/auth/google');
-  }
+//routes
+app.use('/api/comments', require('./routes/api/comments'));
 
-module.exports = router;
+//start server
+const port = process.env.PORT || 5000;
+app.listen(port, () => console.log(`Server started on port ${port}`));
